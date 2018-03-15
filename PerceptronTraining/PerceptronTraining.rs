@@ -11,8 +11,8 @@ fn main(){
     let mut w = def_w.clone();
     let mut avg_err = 0_f64;
 
-    for _i in 0..2{
-
+    for _i in 0..1000{
+        println!("This is {} generation",_i+1);
         println!("{0:<3} | {1:<7} || {2:<7} | {3:<7} | {4:<7} | {5:<7} | {6:<7} || {7:<7} | {8:<7} | {9:<7} | {10:<7}",
                                                                             "x", "f(x)", "in", "si(in)", "si(in)'", "error", "d_wi", "t", "w1", "w2","w3");
         for j in 0.._x.len(){
