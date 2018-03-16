@@ -44,8 +44,8 @@ fn main(){
         .read_line(&mut input_x)
         .expect("failed to read from stdin");
     let test_data: i32 = input_x.trim().parse().unwrap();
-    let input_arr = [test_data % 100, test_data % 10 ,test_data % 1];
-    println!("x is {}{}{} , sigma(in) is {:.3}",input_arr[0],input_arr[1],input_arr[2],predict(input_arr,&mut t,&mut w));
+    let input_arr = [test_data / 100, test_data % 100 / 10 ,test_data % 10];
+    println!("x is {}|{}|{} , sigma(in) is {:.3}",input_arr[0],input_arr[1],input_arr[2],predict(input_arr,&mut t,&mut w));
 }
 
 fn train(input: [i32; 3],ans: i32,_a: f64,t: &mut f64,w: &mut [f64; 3]) -> f64{
