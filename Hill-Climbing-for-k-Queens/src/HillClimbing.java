@@ -1,49 +1,87 @@
-import java.util.Arrays;
+import java.util.*;
 
 public class HillClimbing {
-    public int[] run(int size){
-        int[] queens = Board.generateQueens(size) ;
-        int cost =getHeuristicost(queens);
-        while( 0 < cost){
-            boolean isEnd = false;
-            int tempCost = cost;
-            for(int col = 0; col < size && !isEnd;col++) {
-
-                for (int row = 0; row < size; row++) {
-                    if (row == queens[col])
-                        continue;
-                    int[] array = Arrays.copyOf(queens,size);
-                    array[col] = row;
-                    int newCost = getHeuristicost(array);
-                    if(cost > newCost){
-                        queens[col] = row;
-                        cost = newCost;
-                        isEnd = true;
-                        break;
-                    }
-                }
-            }
-            if(tempCost == cost){
-                queens = Board.generateQueens(size);
-            }
-        }
-        if(cost == 0){
-            return queens;
-        }else{
-            return null;
-        }
+    public static void main(String[] args) {
+        System.out.println("Input count of queen");
+        Scanner sc = new Scanner(System.in);
+        new HillClimbing().run(sc.nextInt());
     }
-    private static int getHeuristicost(int[] queens){
+
+
+    private int getHeuristiCost(int[] board) {
         int cost = 0;
-        for(int i = 0;i<queens.length;i++){
-            for(int j = i + 1;j < queens.length;j++){
-                if(queens[i] == queens[j]) {
+        int limit = board.length - 1;
+        for (int i = 0; i < limit; i++) {
+            for (int j = i + 1; j < board.length; j++) {
+                if (board[i] == board[j]) {
                     cost++;
-                }else if(Math.abs(queens[i]-queens[j]) == j-i){
+                } else if (Math.abs(board[i] - board[j]) == Math.abs( i - j)) {
                     cost++;
                 }
             }
         }
         return cost;
     }
+
+    private int[] generateBoard(int[] board) {
+        ArrayList<Integer> list = new ArrayList<>();
+
+        int cost = getHeuristiCost(board);
+        int newCost;
+
+        int[] newBoard;
+        newBoard = board.clone();
+
+        for (int i = 0; i < board.length; i++) {
+            list.clear();
+            list.add(newBoard[i]);
+            for (int j = 0; j < board.length; j++) {
+                newBoard[i] = j;
+
+                newCost = getHeuristiCost(newBoard);
+
+                if (newCost == cost) {
+                    list.add(j);
+                }
+
+                if (newCost < cost) {
+                    list.clear();
+                    list.add(j);
+                    cost = newCost;
+                }
+            }
+            Random r = new Random();
+            newBoard[i] = list.get(r.nextInt(list.size()));
+        }
+
+        return newBoard;
+    }
+
+    private int[] nextState(int[] board) {
+        int cost = getHeuristiCost(board);
+        int[] tempBoard= generateBoard(board);
+        if (getHeuristiCost(tempBoard) < cost) {
+            return tempBoard;
+        }
+        return null;
+    }
+
+    public void run(int size) {
+        long startTIme = System.currentTimeMillis();
+        int[] board;
+        int cc =0;
+        board = Board.generateQueens(size);
+        while (getHeuristiCost(board) != 0) {
+            if (null == (board = nextState(board))) {
+                //restart
+                board = Board.generateQueens(size);
+                cc++;
+            }
+        }
+        Board.printBoard(Board.queensOnBorad(board));
+        System.out.println("reset time : " +cc);
+        System.out.println("Spend TIme : " + (System.currentTimeMillis()-startTIme) + "ms");
+    }
 }
+
+
