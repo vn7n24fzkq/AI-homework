@@ -79,7 +79,7 @@ public class HillClimbing {
             }
         }
         Board.printBoard(Board.queensOnBorad(board));
-        System.out.println("reset time : " +cc);
+        System.out.println("reset count+cc);
         System.out.println("Spend TIme : " + (System.currentTimeMillis()-startTIme) + "ms");
     }
 }
