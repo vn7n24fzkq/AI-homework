@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Hill-Climbing-for-k-Queens:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Hill_Climbing_for_k_Queens_jar</output-path>
+    <root id="archive" name="Hill-Climbing-for-k-Queens.jar">
+      <element id="module-output" name="Hill-Climbing-for-k-Queens" />
+    </root>
+  </artifact>
+</component>

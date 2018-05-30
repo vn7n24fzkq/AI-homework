@@ -1,0 +1,1 @@
+java -jar -XX:CompileThreshold=2 -XX:+AggressiveOpts -XX:+UseFastAccessorMethods  -XX:+UseG1GC out/artifacts/Hill_Climbing_for_k_Queens_jar/Hill-Climbing-for-k-Queens.jar
