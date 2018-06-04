@@ -8,16 +8,28 @@ public class AlphaBetaPruning {
 
     public static void main(String[] args) {
         try (BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
+            branch= Integer.valueOf(br.readLine());
             depth = Integer.valueOf(br.readLine());
-            branch = Integer.valueOf(br.readLine());
             String[] tempNodes = br.readLine().split(",");
             int[] tempNumbers = new int[tempNodes.length];
             for (int i = 0; i < tempNodes.length; i++) {
                 tempNumbers[i] = Integer.valueOf(tempNodes[i]);
             }
             AlphaBetaTree tree = new AlphaBetaTree(branch, depth, tempNumbers);
-            System.out.println("root :" + tree.pruning());
-            System.out.println("修剪次數 :" + tree.cut);
+            System.out.println("root : " + tree.pruning());
+            System.out.println("修剪次數 : " + tree.cut);
+            System.out.println("未拜訪樹葉個數 : " + tree.lastNodes.size());
+            System.out.print("未拜訪樹葉 : ");
+            for(AlphaBetaTree.Node node :tree.lastNodes){
+                System.out.print("," + node.alpha);
+            }
+            System.out.println();
+            System.out.print("已拜訪樹葉 : ");
+            for(AlphaBetaTree.Node node :tree.visitedNodes){
+                System.out.print("," + node.alpha);
+            }
+            System.out.println();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -29,6 +41,7 @@ class AlphaBetaTree {
     int branch;
     int depth;
     ArrayList<Node> lastNodes = new ArrayList();
+    ArrayList<Node> visitedNodes = new ArrayList();
     int cut = 0;
     public AlphaBetaTree(int branch, int depth, int[] nodes) {
         this.branch = branch;
@@ -41,7 +54,7 @@ class AlphaBetaTree {
     }
 
     public int pruning() {
-        System.out.print("被修剪的數字");
+        System.out.print("修剪時的數字 : ");
         int i = pruning(root,Integer.MIN_VALUE,Integer.MAX_VALUE,true);
         System.out.println();
         return i;
@@ -49,8 +62,15 @@ class AlphaBetaTree {
 
     private Integer pruning(Node currentNode,int alpha,int beta ,boolean max) {
         int value;
-        if(currentNode.childs == null)
+        try{
+            lastNodes.remove(lastNodes.indexOf(currentNode));
+        }catch (Exception e){
+
+        }
+        if(currentNode.childs == null){
+            visitedNodes.add(currentNode);
             return currentNode.alpha;
+        }
         if(max){
             value = alpha;
             for (int i = 0; i < currentNode.childs.length; i++) {
@@ -88,7 +108,7 @@ class AlphaBetaTree {
     }
 
     public void instanceTree(int currentDepth, Node currentNode) {
-        if (currentDepth == this.depth) {
+        if (currentDepth > this.depth) {
             lastNodes.add(currentNode);
             return;
         }
@@ -110,27 +130,5 @@ class AlphaBetaTree {
         public Node parent;
         public Node[] childs;
         public Integer alpha, beta;
-
-        private Integer getMin() {
-            if (childs == null)
-                return null;
-            int min = Integer.MAX_VALUE;
-            for (Node n : childs) {
-                if (n.alpha > min)
-                    min = n.alpha;
-            }
-            return min;
-        }
-
-        private Integer getMax() {
-            if (childs == null)
-                return null;
-            int max = Integer.MIN_VALUE;
-            for (Node n : childs) {
-                if (n.alpha < max)
-                    max = n.alpha;
-            }
-            return max;
-        }
     }
 }
